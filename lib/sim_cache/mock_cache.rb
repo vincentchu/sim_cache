@@ -3,7 +3,7 @@ module SimCache
     
     DEFAULT_MAX_KEYS = 100_000
     DEFAULT_CACHE_NAME = "cache"
-    attr_reader :redis, :cache_name, :max_keys, :hits, :misses
+    attr_reader :redis, :cache_name, :max_keys, :hits, :misses, :num_keys
     
     KeyNotFound = Class.new(StandardError)
     
@@ -16,6 +16,7 @@ module SimCache
     
     def get(key)
       retval = @redis.client.call(:zadd, cache_name, -(Time.now.to_f*1000000).to_i, key)
+      @num_keys += 1 if (retval == 1)
       prune_cache!
       
       if (retval == 1)
@@ -28,10 +29,6 @@ module SimCache
 
     def rank_for_key( key )
       @redis.zrank(cache_name, key)
-    end
-    
-    def num_keys
-      @redis.zcard(cache_name)
     end
     
     def percent_utilization
@@ -51,6 +48,7 @@ module SimCache
     def init_counters!
       @misses     = 0
       @hits       = 0
+      @num_keys = 0
     end
     
     def init_redis!(opts)
@@ -62,7 +60,10 @@ module SimCache
     end
     
     def prune_cache!
-      redis.zremrangebyrank(cache_name, max_keys, 2*max_keys) if (num_keys > max_keys)
+      if (num_keys > max_keys)
+        redis.zremrangebyrank(cache_name, max_keys, 2*max_keys) 
+        @num_keys = max_keys
+      end
     end
   end  
 end

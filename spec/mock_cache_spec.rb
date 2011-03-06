@@ -3,7 +3,10 @@ require 'spec_helper'
 describe SimCache::MockCache do
   
   before(:all)  { @mock_cache = SimCache::MockCache.new(:max_keys => 5) }
-  before(:each) { @mock_cache.redis.flushdb }
+  before(:each) do 
+    @mock_cache.redis.flushdb
+    @mock_cache.send(:init_counters!)
+  end
   
   it "should have a method for getting" do
     @mock_cache.should respond_to(:get)
