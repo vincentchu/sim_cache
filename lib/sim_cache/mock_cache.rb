@@ -18,7 +18,6 @@ module SimCache
       retval = @redis.client.call(:zadd, cache_name, -(Time.now.to_f*1000000).to_i, key)
       prune_cache!
       
-      @total_keys += 1
       if (retval == 1)
         @misses += 1 
         raise KeyNotFound 
@@ -32,7 +31,6 @@ module SimCache
     end
     
     def num_keys
-      @tot
       @redis.zcard(cache_name)
     end
     
@@ -53,7 +51,6 @@ module SimCache
     def init_counters!
       @misses     = 0
       @hits       = 0
-      @total_keys = 0
     end
     
     def init_redis!(opts)
