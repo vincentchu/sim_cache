@@ -26,11 +26,11 @@ SimCache is a simple tool replays a log file against an idealized LRU cache of a
 
 SimCache consists of two parts: a simulated LRU cache with a size you designate, and a replay script that plays a log file against the idealized cache. 
 
-Please not that most LRU caches (e.g., Memcache) do not behave as a perfect LRU cache. Therefore, the results you obtain from SimCache 
+Please not that most LRU caches (e.g., Memcache) do not behave as a perfect LRU cache. Therefore, the results you obtain from SimCache will not match reality perfectly. But it's usually good enough for ballpark figures and understanding how large of a cache you'll need, given your current (or projected) usage patterns. 
 
 ## The Log File
 
-The log file must be in the following format. The bracketed time stamp designates when an object is accessed; the second column is any string that uniquely identifies the object requested from the cache. For an example, see spec/fixtures/test.log (excerpted here): 
+The log file must be in the following format. The bracketed time stamp designates when an object is accessed; the second column is any string that uniquely identifies the object requested from the cache. For an example, see `spec/fixtures/test.log` (excerpted here): 
 
     [Feb 28 01:34:31] post_44164631_js
     [Feb 28 01:34:59] post_44164631_js
@@ -54,7 +54,7 @@ To start a replay, simply do the following:
 
 ## Report Output
 
-The report that is generated is in the following format (excerpted from spec/fixtures/sample_out.log): 
+The report that is generated is in the following format (excerpted from `spec/fixtures/sample_out.log`): 
 
     [        Time]   Unix Time           req/s         hits/s     misses/sec  % hit -  TotKeys %Cache  %Hits
     --------------------------------------------------------------------------------------------------------
@@ -73,4 +73,4 @@ Informally, SimCache is pretty fast. On my 2.4 GHz Macbook Pro with 8 GB RAM I w
 
 # Contact
 
-SimCache was created by Vincent Chu (vince [at] posterous.com). 
+SimCache was created by Vincent Chu (vince [at] posterous.com) and is used at Posterous. 
