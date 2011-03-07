@@ -32,37 +32,37 @@ Please not that most LRU caches (e.g., Memcache) do not behave as a perfect LRU 
 
 The log file must be in the following format. The bracketed time stamp designates when an object is accessed; the second column is any string that uniquely identifies the object requested from the cache. For an example, see spec/fixtures/test.log (excerpted here): 
 
-  [Feb 28 01:34:31] post_44164631_js
-  [Feb 28 01:34:59] post_44164631_js
-  [Feb 28 01:52:36] post_11080788_html
-  [Feb 28 02:09:28] post_44427139_html
-  [Feb 28 02:26:08] post_19142226_js
-  [Feb 28 02:45:01] post_29425455_js
-  [Feb 28 03:01:27] post_20254178_js
-  [Feb 28 03:20:21] post_44359317_js
+    [Feb 28 01:34:31] post_44164631_js
+    [Feb 28 01:34:59] post_44164631_js
+    [Feb 28 01:52:36] post_11080788_html
+    [Feb 28 02:09:28] post_44427139_html
+    [Feb 28 02:26:08] post_19142226_js
+    [Feb 28 02:45:01] post_29425455_js
+    [Feb 28 03:01:27] post_20254178_js
+    [Feb 28 03:20:21] post_44359317_js
 
 ## Writing code
 
 To start a replay, simply do the following: 
 
-  require 'sim_cache'
-  SimCache::LogReplayer.new(
-    :log_file => "/path/to/logfile.log",
-    :report_file => "/path/to/report.log,
-    :cache_options => {:max_keys => 6_000_000}
-  ).replay!
+    require 'sim_cache'
+    SimCache::LogReplayer.new(
+      :log_file => "/path/to/logfile.log",
+      :report_file => "/path/to/report.log,
+      :cache_options => {:max_keys => 6_000_000}
+    ).replay!
 
 ## Report Output
 
 The report that is generated is in the following format (excerpted from spec/fixtures/sample_out.log): 
 
-  [        Time]   Unix Time           req/s         hits/s     misses/sec  % hit -  TotKeys %Cache  %Hits
-  --------------------------------------------------------------------------------------------------------
-  [ 02-28 01:34]  1298885640          0.0333         0.0167         0.0167   0.50 - 1.00e+00  10.00   0.00
-  [ 02-28 01:52]  1298886720          0.0167         0.0000         0.0167   0.00 - 2.00e+00  20.00  33.33
-  [ 02-28 02:09]  1298887740          0.0167         0.0000         0.0167   0.00 - 3.00e+00  30.00  25.00
-  [ 02-28 02:26]  1298888760          0.0167         0.0000         0.0167   0.00 - 4.00e+00  40.00  20.00
-  [ 02-28 02:45]  1298889900          0.0167         0.0000         0.0167   0.00 - 5.00e+00  50.00  16.67
+    [        Time]   Unix Time           req/s         hits/s     misses/sec  % hit -  TotKeys %Cache  %Hits
+    --------------------------------------------------------------------------------------------------------
+    [ 02-28 01:34]  1298885640          0.0333         0.0167         0.0167   0.50 - 1.00e+00  10.00   0.00
+    [ 02-28 01:52]  1298886720          0.0167         0.0000         0.0167   0.00 - 2.00e+00  20.00  33.33
+    [ 02-28 02:09]  1298887740          0.0167         0.0000         0.0167   0.00 - 3.00e+00  30.00  25.00
+    [ 02-28 02:26]  1298888760          0.0167         0.0000         0.0167   0.00 - 4.00e+00  40.00  20.00
+    [ 02-28 02:45]  1298889900          0.0167         0.0000         0.0167   0.00 - 5.00e+00  50.00  16.67
 
 ## Plotting Results
 
