@@ -60,7 +60,7 @@ module SimCache
         "%Hits"
       ]
       @report_file_handle.puts sprintf("[%12s] %11s  %14s %14s %14s %6s - %8s %6s %6s", *vals)
-      @report_file_handle.puts "-" * 113
+      @report_file_handle.puts "-" * 104
     end
 
     def output_report
