@@ -1,12 +1,14 @@
 # SimCache - A tool for investigating cache performance given observed log data
 
-Modern websites often depend heavily on caching strategies to reduce load on their primary databases and to boost performance of slow-running or heavily-utilized portions of their site. 
+Modern web applications depend heavily on caching strategies to reduce load on primary databases and to boost performance of slow-running or heavily-utilized features or queries. 
 
-When evaluating different caching strategies (Memcache vs. Redis vs. something else), it is often important to understand the expected load that the cache will be expected to bear. During this planning, several key questions must often be answered:
+When evaluating different caching strategies (e.g., Memcache vs. Redis vs. something else), it is often important to understand the expected load that the cache will be expected to bear. During this planning, several key questions must often be answered:
 
- * What read and write throughput is the cache required to sustain? 
+ * What read and write throughput must the cache sustain? 
  * How large should our cache be to deliver a given level of performance? 
  * How will cache performance degrade with increased traffic? 
+ * How long does it take to saturate the cache? 
+ * What will be the steady-state performance of our cache?
  
 Answering such questions may help inform decisions about which caching strategy is appropriate, and how costly such a strategy would be. 
 
@@ -24,15 +26,15 @@ SimCache is a simple tool replays a log file against an idealized LRU cache of a
 
 # Usage
 
-SimCache consists of two parts: a simulated LRU cache with a size you designate, and a replay script that plays a log file against the idealized cache. 
+SimCache consists of two parts: a simulated LRU cache with a user-specified size, and a replay script that plays a log file against the idealized cache. 
 
-Please not that most LRU caches (e.g., Memcache) do not behave as a perfect LRU cache. Therefore, the results you obtain from SimCache will not match reality perfectly. But it's usually good enough for ballpark figures and understanding how large of a cache you'll need, given your current (or projected) usage patterns. 
+Please note that most LRU caches (e.g., Memcache) do not behave as a perfect LRU cache. Therefore, the results obtained from SimCache will not perfectly match reality perfectly. However, the results are accurate enough to provide key characteristics about cache performance. 
 
 ## The Log File
 
-The log file must be in the following format. The bracketed time stamp designates when an object is accessed; the second column is any string that uniquely identifies the object requested from the cache. For an example, see `spec/fixtures/test.log` (excerpted here): 
+The log file must be in the following format. The bracketed time stamp designates when an object was accessed; the second column is any string that uniquely identifies the object requested from the cache. For an example, see `spec/fixtures/test.log` (excerpted here): 
 
-    [Feb 28 01:34:31] post_44164631_js
+      [Feb 28 01:34:31] post_44164631_js
     [Feb 28 01:34:59] post_44164631_js
     [Feb 28 01:52:36] post_11080788_html
     [Feb 28 02:09:28] post_44427139_html
@@ -41,7 +43,7 @@ The log file must be in the following format. The bracketed time stamp designate
     [Feb 28 03:01:27] post_20254178_js
     [Feb 28 03:20:21] post_44359317_js
 
-## Writing code
+## Replaying Log Files
 
 To start a replay, simply do the following: 
 
@@ -66,10 +68,31 @@ The report that is generated is in the following format (excerpted from `spec/fi
 
 ## Plotting Results
 
+Gnuplot may be used to plot the data in the report file immediately. As an example, the following Gnuplot command will plot the miss percentage for four different sizes of cache:
 
+    plot 'log_0' u 4:(100*($7/$5)) w l, 'log_1' u 4:(100*($7/$5)) w l, 'log_2' u 4:(100*($7/$5)) w l, 'log_3' u 4:(100*($7/$5)) w l
+
+Graph of results: 
+
+![Cache Miss Percentage](spec/fixtures/miss_percentage.png)
+
+Similarly, the following: 
+
+    plot 'log_0' u 4:($11) w l, 'log_1' u 4:($11) w l, 'log_2' u 4:($11) w l, 'log_3' u 4:($11) w l
+    
+will plot the cache utilization percentage over time: 
+
+![Cache Utilization](spec/fixtures/cache_util.png)
+
+# Requirements
+
+SimCache uses Redis as a backing store and uses the redis gem (v2.0.5). So you'll have to install that. 
+    
 # Speed
 
-Informally, SimCache is pretty fast. On my 2.4 GHz Macbook Pro with 8 GB RAM I was able to replay ~40 million log entries in around an hour while doing normal activities (e.g., browsing the web, watching YouTube). Your mileage may vary. 
+Informally, SimCache is pretty fast. On my 2.4 GHz Macbook Pro with 8 GB RAM I was able to replay ~1 million log entries in just over 4 minutes while doing normal activities (e.g., browsing the web, watching YouTube). Your mileage may vary. If you have a large sample of data (e.g., tens of millions of rows or more), it might be best to take a subsample.
+
+However, be careful how you choose the subsample; instead of randomly selecting log entries, it's probably better to take *all* log entries for a given sample of keys. Doing so will ensure that the hit / miss rates are representative of the entire sample.   
 
 # Contact
 
