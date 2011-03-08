@@ -34,7 +34,7 @@ Please note that most LRU caches (e.g., Memcache) do not behave as a perfect LRU
 
 The log file must be in the following format. The bracketed time stamp designates when an object was accessed; the second column is any string that uniquely identifies the object requested from the cache. For an example, see `spec/fixtures/test.log` (excerpted here): 
 
-      [Feb 28 01:34:31] post_44164631_js
+    [Feb 28 01:34:31] post_44164631_js
     [Feb 28 01:34:59] post_44164631_js
     [Feb 28 01:52:36] post_11080788_html
     [Feb 28 02:09:28] post_44427139_html
@@ -74,7 +74,7 @@ Gnuplot may be used to plot the data in the report file immediately. As an examp
 
 Graph of results: 
 
-![Cache Miss Percentage](spec/fixtures/miss_percentage.png)
+![Cache Miss Percentage](https://github.com/vincentchu/sim_cache/blob/master/spec/fixtures/miss_percentage.png?raw=true)
 
 Similarly, the following: 
 
@@ -82,7 +82,7 @@ Similarly, the following:
     
 will plot the cache utilization percentage over time: 
 
-![Cache Utilization](spec/fixtures/cache_util.png)
+![Cache Utilization](https://github.com/vincentchu/sim_cache/blob/master/spec/fixtures/cache_util.png?raw=true)
 
 # Requirements
 
