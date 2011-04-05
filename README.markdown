@@ -84,6 +84,10 @@ will plot the cache utilization percentage over time:
 
 ![Cache Utilization](https://github.com/vincentchu/sim_cache/blob/master/spec/fixtures/cache_util.png?raw=true)
 
+We have used SimCache at Posterous to analyze our cache performance. Using the data from our logs, we used SimCache to appropriately size our cache. This is how the actual results stack up against prediction. At time = 0, the larger cache was put into place, leading to a spike in miss rate. As the cache filled, the actual miss rate matched the predicted miss rate quite well (1 == baseline).
+
+![Prediction vs. Actual](https://github.com/vincentchu/sim_cache/blob/master/spec/fixtures/predicted_vs_actual.png?raw=true)
+
 # Requirements
 
 SimCache uses Redis as a backing store and uses the redis gem (v2.0.5). So you'll have to install that. 
